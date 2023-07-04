@@ -16,6 +16,7 @@ import {
   RemoveFileIcon,
   InputLabel,
   DocumentIcon,
+  SubmitButton,
 } from './fileUploadStyles'
 
 interface FileObject {
@@ -142,6 +143,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
             )
           })}
         </PreviewList>
+        <SubmitButton type="submit">Submit</SubmitButton>
       </FilePreviewContainer>
     </>
   )

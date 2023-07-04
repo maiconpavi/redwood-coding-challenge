@@ -241,6 +241,11 @@ export const DocumentIcon = styled(FontAwesomeIcon)`
 `
 
 export const SubmitButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  margin-top: 50px;
   background-color: #474e68;
   color: #fff;
   font-size: 1rem;
