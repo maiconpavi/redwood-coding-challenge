@@ -9,7 +9,7 @@ export const FileUploadContainer = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: white;
+  background-color: #202324;
 `
 
 export const FormField = styled.input`
@@ -33,14 +33,14 @@ export const FormField = styled.input`
 export const InputLabel = styled.label`
   top: -21px;
   font-size: 13px;
-  color: white;
+  color: rgb(232, 230, 227);
   font-weight: bold;
   left: 0;
   position: absolute;
 `
 
 export const DragDropText = styled.p`
-  color: #474e68;
+  color: rgb(232, 230, 227);
   font-weight: bold;
   letter-spacing: 2.2px;
   margin-top: 0;
@@ -64,10 +64,12 @@ const pulseAnimation = keyframes`
 `
 
 export const UploadFileBtn = styled.button`
+  width: 50px;
+  height: 70px;
   box-sizing: border-box;
   appearance: none;
   background-color: transparent;
-  border: 2px solid #474e68;
+  border: 2px solid rgb(55, 60, 62);
   cursor: pointer;
   font-size: 1rem;
   line-height: 1;
@@ -75,35 +77,19 @@ export const UploadFileBtn = styled.button`
   text-align: center;
   text-transform: uppercase;
   font-weight: 700;
-  border-radius: 6px;
-  color: #474e68;
+  border-radius: 50%;
+  color: rgb(232, 230, 227);
   position: relative;
   overflow: hidden;
   z-index: 1;
   transition: color 250ms ease-in-out;
   font-family: 'Open Sans', sans-serif;
-  width: 45%;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  &:after {
-    content: '';
-    position: absolute;
-    display: block;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 100%;
-    background: #202124;
-    z-index: -1;
-    transition: width 250ms ease-in-out;
-  }
-
   .upload-icon {
     font-size: 22px;
-    margin-right: 5px;
   }
 
   @media only screen and (max-width: 768px) {
@@ -122,6 +108,7 @@ export const UploadFileBtn = styled.button`
   &:hover {
     color: #fff;
     outline: 0;
+    border-color: #202124;
     background: #474e68;
     animation: ${pulseAnimation} 1s infinite;
   }
@@ -241,13 +228,15 @@ export const DocumentIcon = styled(FontAwesomeIcon)`
 `
 
 export const SubmitButton = styled.button`
+  width: 200px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto;
   margin-top: 50px;
   background-color: #474e68;
-  color: #e8e6e3;
+  color: rgb(232, 230, 227);
   font-size: 1rem;
   font-weight: bold;
   padding: 1em 2em;

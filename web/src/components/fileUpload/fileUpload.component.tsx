@@ -1,6 +1,11 @@
 import React, { useRef, useState, ChangeEvent } from 'react'
 
-import { faTrashAlt, faUpload, faFile } from '@fortawesome/free-solid-svg-icons'
+import {
+  faTrashAlt,
+  faUpload,
+  faFile,
+  faPlus,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import graphql from 'types/graphql'
 
@@ -21,7 +26,6 @@ import {
   RemoveFileIcon,
   InputLabel,
   DocumentIcon,
-  SubmitButton,
 } from './fileUploadStyles'
 
 interface FileObject {
@@ -29,7 +33,6 @@ interface FileObject {
 }
 
 interface FileUploadProps {
-  label: string
   updateFilesCb: (files: File[]) => void
   maxFileSizeInBytes?: number
   multiple?: boolean
@@ -57,7 +60,6 @@ const convertBytesToKB = (bytes: number): number =>
   Math.round(bytes / KILO_BYTES_PER_BYTE)
 
 const FileUpload: React.FC<FileUploadProps> = ({
-  label,
   updateFilesCb,
   maxFileSizeInBytes = DEFAULT_MAX_FILE_SIZE_IN_BYTES,
   ...otherProps
@@ -104,7 +106,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
   }
 
   const handleUploadBtnClick = (): void => {
-    fileInputField.current?.click()
+    alert('Upload button clicked!')
   }
 
   const addNewFiles = (newFiles: FileList | null): { [key: string]: File } => {
@@ -150,20 +152,10 @@ const FileUpload: React.FC<FileUploadProps> = ({
   return (
     <>
       <FileUploadContainer>
-        <InputLabel>{label}</InputLabel>
-        <DragDropText>Drag and drop your files anywhere or</DragDropText>
+        <DragDropText>Add new file</DragDropText>
         <UploadFileBtn type="button" onClick={handleUploadBtnClick}>
-          <FontAwesomeIcon icon={faUpload} className="upload-icon" />
-          <span>Upload {otherProps.multiple ? 'files' : 'a file'}</span>
+          <FontAwesomeIcon icon={faPlus} className="upload-icon" />
         </UploadFileBtn>
-        <FormField
-          type="file"
-          ref={fileInputField}
-          onChange={handleNewFileUpload}
-          title=""
-          value=""
-          {...otherProps}
-        />
       </FileUploadContainer>
       <FilePreviewContainer>
         <PreviewList>
@@ -197,7 +189,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
             )
           })}
         </PreviewList>
-        <SubmitButton type="submit">Submit</SubmitButton>
       </FilePreviewContainer>
     </>
   )

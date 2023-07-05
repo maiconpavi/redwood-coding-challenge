@@ -26,7 +26,6 @@ const MyPagePage = () => {
       <Container>
         <FileUpload
           accept=".jpg,.png,.jpeg,.pdf"
-          label="Files to upload"
           updateFilesCb={updateUploadedFiles}
         />
       </Container>
