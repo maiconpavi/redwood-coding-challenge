@@ -1,4 +1,4 @@
-import { sha1 } from 'object-hash'
+import sha256 from 'fast-sha256'
 
 export const putObject = async (
   signedUrl: string,
@@ -22,10 +22,19 @@ export const PUT_SIGNED_URL = gql`
   mutation PutSignedUrlQuery($input: PutSignedUrlInput!) {
     putSignedUrl(input: $input) {
       signedUrl
-      versionId
+      fileVersion {
+        fileId
+        versionId
+        hash
+        name
+        description
+        createdAt
+      }
     }
   }
 `
-export const getFileHash = (file: Blob): string => {
-  return sha1(file)
+export const getFileHash = async (file: Blob): Promise<string> => {
+  return Buffer.from(
+    sha256((await file.stream().getReader().read()).value)
+  ).toString('hex')
 }

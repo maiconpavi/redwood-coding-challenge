@@ -38,7 +38,7 @@ export const schema = gql`
 
   type PutSignedUrl {
     signedUrl: String
-    versionId: String
+    fileVersion: FileVersion
   }
 
   type Mutation {
@@ -50,5 +50,7 @@ export const schema = gql`
     ): FileVersion! @skipAuth
     deleteFileVersion(fileId: Int!, versionId: String!): FileVersion! @skipAuth
     putSignedUrl(input: PutSignedUrlInput!): PutSignedUrl @skipAuth
+    getSignedUrl(input: PutSignedUrlInput!): PutSignedUrl @skipAuth
+
   }
 `

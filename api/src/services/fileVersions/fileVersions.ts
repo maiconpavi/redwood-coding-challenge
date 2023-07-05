@@ -38,8 +38,7 @@ export const putSignedUrl: MutationResolvers['putSignedUrl'] = async ({
 
   if (existingFileVersion) {
     return {
-      signedUrl: null,
-      versionId: existingFileVersion.versionId,
+      fileVersion: existingFileVersion,
     }
   }
 
