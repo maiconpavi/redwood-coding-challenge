@@ -7,6 +7,7 @@ import type {
 } from 'types/graphql'
 
 import { db } from 'src/lib/db'
+import { logger } from 'src/lib/logger'
 
 const client = new S3Client({ region: 'us-east-1' })
 const bucket = 'redwood-coding-challenge'
@@ -21,14 +22,17 @@ export const fileVersion: QueryResolvers['fileVersion'] = ({ id }) => {
   })
 }
 
-export const signedUrl: QueryResolvers['putSignedUrl'] = async ({
+export const putSignedUrl: QueryResolvers['putSignedUrl'] = async ({
   fileId,
   hash,
   contentType,
 }) => {
+  logger.info(`fileId ${fileId}`)
   const existingFileVersion = await db.fileVersion.findFirst({
     where: { fileId, hash },
   })
+  logger.info(`existingFileVersion ${JSON.stringify(existingFileVersion)}`)
+
   if (existingFileVersion) {
     return {
       signedUrl: null,
@@ -36,14 +40,22 @@ export const signedUrl: QueryResolvers['putSignedUrl'] = async ({
     }
   }
 
-  const command = new PutObjectCommand({
-    Bucket: bucket,
-    Key: fileId.toString(),
-    ContentType: contentType,
+  return getSignedUrl(
+    client,
+    new PutObjectCommand({
+      Bucket: bucket,
+      Key: fileId.toString(),
+      ContentType: contentType,
+    }),
+    {
+      expiresIn: 3600,
+    }
+  ).then((signedUrl) => {
+    logger.info(`signedUrl ${signedUrl}`)
+    return {
+      signedUrl,
+    }
   })
-  return {
-    signedUrl: await getSignedUrl(client, command, { expiresIn: 3600 }),
-  }
 }
 
 export const createFileVersion: MutationResolvers['createFileVersion'] = ({
