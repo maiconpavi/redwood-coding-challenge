@@ -20,7 +20,7 @@ export const putObject = async (
 }
 
 export const PUT_SIGNED_URL = gql`
-  mutation CreateContactMutation(
+  query PutSignedUrlQuery(
     $fileId: Int!
     $hash: String!
     $contentType: String!
