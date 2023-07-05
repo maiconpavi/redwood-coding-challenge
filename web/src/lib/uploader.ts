@@ -2,13 +2,12 @@ import { sha1 } from 'object-hash'
 
 export const putObject = async (
   signedUrl: string,
-  contentType: string,
   body: Blob
 ): Promise<string> => {
   return fetch(signedUrl, {
     body,
     headers: {
-      'Content-Type': contentType,
+      'Content-Type': body.type,
     },
     method: 'PUT',
   }).then((response) => {
@@ -20,12 +19,8 @@ export const putObject = async (
 }
 
 export const PUT_SIGNED_URL = gql`
-  query PutSignedUrlQuery(
-    $fileId: Int!
-    $hash: String!
-    $contentType: String!
-  ) {
-    putSignedUrl(fileId: $fileId, hash: $hash, contentType: $contentType) {
+  mutation PutSignedUrlQuery($input: PutSignedUrlInput!) {
+    putSignedUrl(input: $input) {
       signedUrl
       versionId
     }

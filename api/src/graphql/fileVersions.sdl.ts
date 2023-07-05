@@ -10,19 +10,11 @@ export const schema = gql`
     fileId: Int
   }
 
-  type PutSignedUrlResponse {
-    signedUrl: String
-    versionId: String
-  }
-
   type Query {
     fileVersions: [FileVersion!]! @skipAuth
     fileVersion(id: Int!): FileVersion @skipAuth
-    putSignedUrl(
-      fileId: Int!
-      hash: String!
-      contentType: String!
-    ): PutSignedUrlResponse @skipAuth
+    fileVersionByVersionId(fileId: Int!, versionId: String!): FileVersion
+      @skipAuth
   }
 
   input CreateFileVersionInput {
@@ -41,10 +33,22 @@ export const schema = gql`
     fileId: Int
   }
 
+  input PutSignedUrlInput {
+    fileId: Int!
+    hash: String!
+    contentType: String!
+  }
+
+  type PutSignedUrl {
+    signedUrl: String
+    versionId: String
+  }
+
   type Mutation {
     createFileVersion(input: CreateFileVersionInput!): FileVersion! @skipAuth
     updateFileVersion(id: Int!, input: UpdateFileVersionInput!): FileVersion!
       @skipAuth
     deleteFileVersion(id: Int!): FileVersion! @skipAuth
+    putSignedUrl(input: PutSignedUrlInput!): PutSignedUrl @skipAuth
   }
 `

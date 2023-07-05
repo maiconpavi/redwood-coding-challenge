@@ -195,7 +195,7 @@ export const PreviewContainer = styled.section`
   height: 120px;
   border-radius: 6px;
   box-sizing: border-box;
-  background: white;
+  background: rgb(24, 26, 27);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 
   &:hover {
@@ -247,7 +247,7 @@ export const SubmitButton = styled.button`
   margin: 0 auto;
   margin-top: 50px;
   background-color: #474e68;
-  color: #fff;
+  color: #e8e6e3;
   font-size: 1rem;
   font-weight: bold;
   padding: 1em 2em;

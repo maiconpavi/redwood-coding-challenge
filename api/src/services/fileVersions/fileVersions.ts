@@ -22,10 +22,15 @@ export const fileVersion: QueryResolvers['fileVersion'] = ({ id }) => {
   })
 }
 
-export const putSignedUrl: QueryResolvers['putSignedUrl'] = async ({
-  fileId,
-  hash,
-  contentType,
+export const fileVersionByVersionId: QueryResolvers['fileVersionByVersionId'] =
+  ({ fileId, versionId }) => {
+    return db.fileVersion.findUnique({
+      where: { fileId, versionId },
+    })
+  }
+
+export const putSignedUrl: MutationResolvers['putSignedUrl'] = async ({
+  input: { fileId, hash, contentType },
 }) => {
   logger.info(`fileId ${fileId}`)
   const existingFileVersion = await db.fileVersion.findFirst({

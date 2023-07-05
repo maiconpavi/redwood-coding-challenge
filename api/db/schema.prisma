@@ -19,6 +19,7 @@ model FileVersion {
   fileId      Int?
 
   @@unique([fileId, hash])
+  @@unique([fileId, versionId])
 }
 
 model File {

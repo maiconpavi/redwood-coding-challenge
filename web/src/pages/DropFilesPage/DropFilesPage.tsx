@@ -10,6 +10,7 @@ const MyPagePage = () => {
   const [newUserInfo, setNewUserInfo] = useState({
     profileImages: [],
   })
+  // useQuery()
 
   const updateUploadedFiles = (files) =>
     setNewUserInfo({ ...newUserInfo, profileImages: files })
@@ -26,7 +27,6 @@ const MyPagePage = () => {
         <FileUpload
           accept=".jpg,.png,.jpeg,.pdf"
           label="Files to upload"
-          multiple
           updateFilesCb={updateUploadedFiles}
         />
       </Container>
