@@ -16,25 +16,21 @@ export const fileVersions: QueryResolvers['fileVersions'] = () => {
   return db.fileVersion.findMany()
 }
 
-export const fileVersion: QueryResolvers['fileVersion'] = ({ id }) => {
+export const fileVersion: QueryResolvers['fileVersion'] = ({
+  fileId,
+  versionId,
+}) => {
   return db.fileVersion.findUnique({
-    where: { id },
+    where: { fileId_versionId: { fileId, versionId } },
   })
 }
-
-export const fileVersionByVersionId: QueryResolvers['fileVersionByVersionId'] =
-  ({ fileId, versionId }) => {
-    return db.fileVersion.findUnique({
-      where: { fileId, versionId },
-    })
-  }
 
 export const putSignedUrl: MutationResolvers['putSignedUrl'] = async ({
   input: { fileId, hash, contentType },
 }) => {
   logger.info(`fileId ${fileId}`)
-  const existingFileVersion = await db.fileVersion.findFirst({
-    where: { fileId, hash },
+  const existingFileVersion = await db.fileVersion.findUnique({
+    where: { fileId_hash: { fileId, hash } },
   })
   logger.info(`existingFileVersion ${JSON.stringify(existingFileVersion)}`)
 
@@ -72,25 +68,36 @@ export const createFileVersion: MutationResolvers['createFileVersion'] = ({
 }
 
 export const updateFileVersion: MutationResolvers['updateFileVersion'] = ({
-  id,
+  fileId,
+  versionId,
   input,
 }) => {
   return db.fileVersion.update({
     data: input,
-    where: { id },
+    where: { fileId_versionId: { fileId, versionId } },
   })
 }
 
 export const deleteFileVersion: MutationResolvers['deleteFileVersion'] = ({
-  id,
+  fileId,
+  versionId,
 }) => {
   return db.fileVersion.delete({
-    where: { id },
+    where: { fileId_versionId: { fileId, versionId } },
   })
 }
 
 export const FileVersion: FileVersionRelationResolvers = {
   File: (_obj, { root }) => {
-    return db.fileVersion.findUnique({ where: { id: root?.id } }).File()
+    return db.fileVersion
+      .findUnique({
+        where: {
+          fileId_versionId: {
+            fileId: root?.fileId,
+            versionId: root?.versionId,
+          },
+        },
+      })
+      .File()
   },
 }

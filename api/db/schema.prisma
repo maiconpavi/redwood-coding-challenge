@@ -9,17 +9,16 @@ generator client {
 }
 
 model FileVersion {
-  id          Int      @id @default(autoincrement())
+  fileId      Int
   versionId   String
   hash        String
   name        String
   description String?
   createdAt   DateTime @default(now())
   File        File?    @relation(fields: [fileId], references: [id])
-  fileId      Int?
 
+  @@id([fileId, versionId])
   @@unique([fileId, hash])
-  @@unique([fileId, versionId])
 }
 
 model File {
