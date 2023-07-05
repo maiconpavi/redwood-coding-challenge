@@ -7,7 +7,9 @@ import type {
 import { db } from 'src/lib/db'
 
 export const files: QueryResolvers['files'] = () => {
-  return db.file.findMany()
+  return db.file.findMany({
+    orderBy: { createdAt: 'desc' },
+  })
 }
 
 export const file: QueryResolvers['file'] = ({ id }) => {
@@ -37,6 +39,8 @@ export const deleteFile: MutationResolvers['deleteFile'] = ({ id }) => {
 
 export const File: FileRelationResolvers = {
   versions: (_obj, { root }) => {
-    return db.file.findUnique({ where: { id: root?.id } }).versions()
+    return db.file.findUnique({ where: { id: root?.id } }).versions({
+      orderBy: { createdAt: 'desc' },
+    })
   },
 }

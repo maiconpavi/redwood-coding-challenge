@@ -13,7 +13,9 @@ const client = new S3Client({ region: 'us-east-1' })
 const bucket = 'redwood-coding-challenge'
 
 export const fileVersions: QueryResolvers['fileVersions'] = () => {
-  return db.fileVersion.findMany()
+  return db.fileVersion.findMany({
+    orderBy: { createdAt: 'desc' },
+  })
 }
 
 export const fileVersion: QueryResolvers['fileVersion'] = ({

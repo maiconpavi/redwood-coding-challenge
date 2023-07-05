@@ -19,6 +19,7 @@ model FileVersion {
 
   @@id([fileId, versionId])
   @@unique([fileId, hash])
+  @@index([createdAt(sort: Desc)])
 }
 
 model File {
@@ -27,4 +28,6 @@ model File {
   description String?
   createdAt   DateTime      @default(now())
   versions    FileVersion[]
+
+  @@index([createdAt(sort: Desc)])
 }
