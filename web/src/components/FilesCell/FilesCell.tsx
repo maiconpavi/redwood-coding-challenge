@@ -1,7 +1,8 @@
+import { useState } from 'react'
+
 import graphql from 'types/graphql'
 
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
-import { useState } from 'react'
 
 export const QUERY = gql`
   query FilesQuery {
@@ -33,26 +34,32 @@ export const Failure = ({ error }: CellFailureProps) => (
 export const Success = ({ files }: CellSuccessProps<graphql.Query>) => {
   const [selectedFile, setSelectedFile] = useState<graphql.File | null>(null)
 
-
-  const handleFileClick = (file: graphql.File) => {
-    // logic to handle file click
+  const handleFileClick = (key: string) => {
+    window.location.pathname = `/files/${key}`
   }
 
   return (
     <table>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Created at</th>
-      <th>Last version at</th>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Created at</th>
+          <th>Last version at</th>
+        </tr>
+      </thead>
       <tbody>
         {files.map((item) => {
           return (
-            <tr key={item.id} onClick={handleFileClick}>
+            <tr
+              key={item.id}
+              onClick={() => handleFileClick(item.id.toString())}
+            >
               <td>{item.name}</td>
               <td>{item.description}</td>
               <td>{new Date(item.createdAt).toLocaleString()}</td>
               <td>
-                {item.versions
+                {item.versions && item.versions.length > 0
                   ? new Date(item.versions[0].createdAt).toLocaleString()
                   : 'No version'}
               </td>

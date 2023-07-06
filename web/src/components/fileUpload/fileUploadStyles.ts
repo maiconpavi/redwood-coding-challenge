@@ -67,13 +67,15 @@ export const UploadFileBtn = styled.button`
   justify-content: center;
 
   @media only screen and (max-width: 768px) {
+    padding: 0.8rem;
   }
 
   @media only screen and (max-width: 500px) {
+    padding: 0.6rem;
   }
 
   @media only screen and (max-width: 350px) {
-    padding: 1em;
+    padding: 0.4rem;
   }
 
   &:hover {
@@ -96,10 +98,47 @@ export const FilePreviewContainer = styled.table`
   display: flex;
   border-collapse: collapse;
   color: white;
+  overflow-x: auto;
+  width: 100%;
 
   th,
   td {
     padding: 10px;
+    text-align: left;
+  }
+
+  tr {
+    border: 3px solid #474e68;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #474e68;
+      border-radius: 6px;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    display: flex;
+
+    justify-content: center;
+
+    tr {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    th,
+    td {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 5px;
+    }
+  }
+
+  @media only screen and (min-width: 768px) {
+    justify-content: center;
   }
 `
 
@@ -226,4 +265,5 @@ export const SubmitButton = styled.button`
     opacity: 0.4;
     pointer-events: none;
   }
+}
 `

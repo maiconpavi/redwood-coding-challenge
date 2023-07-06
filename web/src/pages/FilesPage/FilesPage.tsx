@@ -7,7 +7,7 @@ const FilesPage = () => {
     <>
       <MetaTags title="Files" description="Files page" />
 
-      <FileCell />
+      <FileCell/>
     </>
   )
 }
