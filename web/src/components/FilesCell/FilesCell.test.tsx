@@ -1,4 +1,5 @@
 import { render } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './FilesCell'
 import { standard } from './FilesCell.mock'
 
@@ -35,7 +36,7 @@ describe('FilesCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success files={standard().files} />)
+      render(<Success {...standard()} />)
     }).not.toThrow()
   })
 })

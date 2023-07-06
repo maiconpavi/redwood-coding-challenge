@@ -1,13 +1,12 @@
-import { faFile } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
-import { HeaderContainer } from './HeaderStyle'
+import { HeaderContainer, LogoTitle } from './HeaderStyle'
 
 const Header = () => {
   return (
     <HeaderContainer>
-      <FontAwesomeIcon icon={faFile} />
-      <h1>DropFiles</h1>
+      <a href="/">
+        <img src="/favicon.svg" alt="dropfiles" width={40} />
+        <LogoTitle>DropFiles</LogoTitle>
+      </a>
     </HeaderContainer>
   )
 }

@@ -42,15 +42,17 @@ export const QUERY = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => (
-  <h1
+  <div
     style={{
-      marginTop: '70px',
-      marginBottom: '10px',
-      textShadow: '5px 3px 12px #777777',
+      display: 'block',
+      justifyContent: 'center',
+      textAlign: 'center',
+      marginTop: '20px',
     }}
   >
-    No files yet
-  </h1>
+    <img src="/dropFiles.svg" alt="not file" width={150} />
+    <h5>No files yet</h5>
+  </div>
 )
 
 export const Failure = ({ error }: CellFailureProps) => (
@@ -145,7 +147,7 @@ export const Success = (props: CellSuccessProps<graphql.Query>) => {
             return (
               <tr key={row.id}>
                 <td>{row.name}</td>
-                <td>{row.description}</td>
+                <td>{row.description ?? 'No description'}</td>
                 <td>{new Date(row.createdAt).toLocaleString()}</td>
                 <td>
                   {row.versions && row.versions.length > 0

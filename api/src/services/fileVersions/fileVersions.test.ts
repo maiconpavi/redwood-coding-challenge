@@ -25,7 +25,10 @@ describe('fileVersions', () => {
   scenario(
     'returns a single fileVersion',
     async (scenario: StandardScenario) => {
-      const result = await fileVersion({ id: scenario.fileVersion.one.id })
+      const result = await fileVersion({
+        fileId: scenario.fileVersion.one.fileId,
+        versionId: scenario.fileVersion.one.versionId,
+      })
 
       expect(result).toEqual(scenario.fileVersion.one)
     }
@@ -33,31 +36,38 @@ describe('fileVersions', () => {
 
   scenario('creates a fileVersion', async () => {
     const result = await createFileVersion({
-      input: { versionId: 'String', hash: 'String', name: 'String' },
+      input: { fileId: 1, versionId: '2', hash: 'String', name: 'String' },
     })
 
-    expect(result.versionId).toEqual('String')
+    expect(result.versionId).toEqual('2')
     expect(result.hash).toEqual('String')
     expect(result.name).toEqual('String')
   })
 
   scenario('updates a fileVersion', async (scenario: StandardScenario) => {
     const original = (await fileVersion({
-      id: scenario.fileVersion.one.id,
+      fileId: scenario.fileVersion.one.fileId,
+      versionId: scenario.fileVersion.one.versionId,
     })) as FileVersion
     const result = await updateFileVersion({
-      id: original.id,
-      input: { versionId: 'String2' },
+      fileId: scenario.fileVersion.one.fileId,
+      versionId: scenario.fileVersion.one.versionId,
+      input: { name: original.name + '2' },
     })
 
-    expect(result.versionId).toEqual('String2')
+    expect(result.name).toEqual(original.name + '2')
   })
 
   scenario('deletes a fileVersion', async (scenario: StandardScenario) => {
-    const original = (await deleteFileVersion({
-      id: scenario.fileVersion.one.id,
-    })) as FileVersion
-    const result = await fileVersion({ id: original.id })
+    const original = await deleteFileVersion({
+      fileId: scenario.fileVersion.one.fileId,
+      versionId: scenario.fileVersion.one.versionId,
+    })
+    expect(original).not.toEqual(null)
+    const result = await fileVersion({
+      fileId: scenario.fileVersion.one.fileId,
+      versionId: scenario.fileVersion.one.versionId,
+    })
 
     expect(result).toEqual(null)
   })

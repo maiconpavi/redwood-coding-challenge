@@ -79,8 +79,8 @@ const HomePage = () => {
   return (
     <>
       <MetaTags title="Home" />
+      <Header />
       <Container>
-        <Header />
         <Title>My Files</Title>
         <FileModal
           isOpen={modalOpen}

@@ -94,30 +94,35 @@ export const UploadFileBtn = styled.button`
 `
 
 export const FilePreviewContainer = styled.table`
-  margin-top: 20px;
+  margin: 20px 0px;
   display: flex;
+  justify-content: center;
   border-collapse: collapse;
   color: white;
   overflow-x: auto;
   width: 100%;
 
+  thead tr{
+    margin-bottom: 10px;
+  }
   th,
   td {
     padding: 10px;
     text-align: center;
-
     min-width: 100px;
     max-width: 300px;
+    border-radius: 6px;
+  }
+
+  th {
+    background-color: rgb(32, 35, 36);
+    position: sticky;
+    border-radius: 6px;
   }
 
   tr {
-    border: 3px solid #474e68;
-
-    &:hover {
-      background-color: #474e68;
-      border-radius: 6px;
-    }
-  }
+    border-radius: 6px;
+    box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.3), 0px 0px 1px 0px rgba(0, 0, 0, 0.3);
 
   &Version {
     tr {
@@ -126,28 +131,9 @@ export const FilePreviewContainer = styled.table`
   }
 
   @media only screen and (max-width: 768px) {
-    display: flex;
-
-    justify-content: center;
-
-    tr {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    th,
-    td {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 5px;
-    }
+    display: none;
   }
 
-  @media only screen and (min-width: 768px) {
-    justify-content: center;
-  }
 `
 
 export const PreviewList = styled.section`

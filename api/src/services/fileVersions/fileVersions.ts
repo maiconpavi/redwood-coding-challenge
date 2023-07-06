@@ -7,6 +7,7 @@ import type {
 } from 'types/graphql'
 
 import { db } from 'src/lib/db'
+import { logger } from 'src/lib/logger'
 import { CLIENT, BUCKET, deleteFileVersionObject } from 'src/lib/s3'
 
 export const fileVersions: QueryResolvers['fileVersions'] = () => {
@@ -36,7 +37,7 @@ export const getSignedUrl: MutationResolvers['getSignedUrl'] = ({
       VersionId: versionId,
     }),
     {
-      expiresIn: 3600,
+      expiresIn: 600,
     }
   )
 }
@@ -64,7 +65,7 @@ export const putSignedUrl: MutationResolvers['putSignedUrl'] = async ({
         ContentType: contentType,
       }),
       {
-        expiresIn: 3600,
+        expiresIn: 10,
       }
     )
     .then((putSignedUrl) => {
@@ -99,7 +100,11 @@ export const deleteFileVersion: MutationResolvers['deleteFileVersion'] =
     const fileVersion = await db.fileVersion.delete({
       where: { fileId_versionId: { fileId, versionId } },
     })
-    await deleteFileVersionObject(fileVersion)
+    try {
+      await deleteFileVersionObject(fileVersion)
+    } catch (error) {
+      logger.warn(error)
+    }
 
     return fileVersion
   }

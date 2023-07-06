@@ -35,7 +35,7 @@ describe('FileVersionsCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success fileVersions={standard().fileVersions} />)
+      render(<Success file={standard().file} />)
     }).not.toThrow()
   })
 })

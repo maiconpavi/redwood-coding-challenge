@@ -46,7 +46,19 @@ export const QUERY = gql`
 
 export const Loading = () => <div>Loading...</div>
 
-export const Empty = () => <div>Empty</div>
+export const Empty = () => (
+  <div
+    style={{
+      display: 'block',
+      justifyContent: 'center',
+      textAlign: 'center',
+      marginTop: '20px',
+    }}
+  >
+    <img src="/dropFiles.svg" alt="not file" width={150} />
+    <h5>No versions yet</h5>
+  </div>
+)
 
 export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error?.message}</div>
@@ -151,22 +163,29 @@ export const Success = (props: CellSuccessProps<graphql.Query>) => {
       })
     )
   }
+  if (versions.length === 0) {
+    return <Empty />
+  }
 
   return (
     <div>
       <table>
-        <th>Version Name</th>
-        <th>Version Description</th>
-        <th>Crated At</th>
-        <th>Download</th>
-        <th>Edit</th>
-        <th>Delete</th>
+        <thead>
+          <tr>
+            <th>Version Name</th>
+            <th>Version Description</th>
+            <th>Crated At</th>
+            <th>Download</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
         <tbody>
           {versions.map(({ row, editModalIsOpen, deleteModalIsOpen }) => {
             return (
               <tr key={row.versionId}>
                 <td>{row.name}</td>
-                <td>{row.description}</td>
+                <td>{row.description ?? 'No description'}</td>
                 <td>{new Date(row.createdAt).toLocaleString()}</td>
                 <td>
                   <DownloadBtn

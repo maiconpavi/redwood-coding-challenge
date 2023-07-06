@@ -90,14 +90,7 @@ const FilesPage = () => {
           onSave={onSaveFileVersion}
           fileUpload
         />
-        <BackBtn
-          type="button"
-          onClick={() => {
-            window.location.href = '/'
-          }}
-        >
-          Voltar
-        </BackBtn>
+
         <Title>
           File - {file.name} ({date})
         </Title>

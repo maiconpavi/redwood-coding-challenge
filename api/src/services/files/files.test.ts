@@ -1,6 +1,6 @@
 import type { File } from '@prisma/client'
 
-import { files, file, createFile, updateFile, deleteFileVersion } from './files'
+import { files, file, createFile, updateFile, deleteFile } from './files'
 import type { StandardScenario } from './files.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances
@@ -41,9 +41,10 @@ describe('files', () => {
   })
 
   scenario('deletes a file', async (scenario: StandardScenario) => {
-    const original = (await deleteFileVersion({
+    const original = await deleteFile({
       id: scenario.file.one.id,
-    })) as File
+    })
+    expect(original).not.toEqual(null)
     const result = await file({ id: original.id })
 
     expect(result).toEqual(null)
