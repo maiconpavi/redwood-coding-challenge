@@ -51,15 +51,13 @@ export const Success = ({ files }: CellSuccessProps<graphql.Query>) => {
           <th>Name</th>
           <th>Description</th>
           <th>Created at</th>
-          <th>Last version at</th>
         </tr>
       </thead>
       <tbody>
-        <tr key={file.id} onClick={() => handleFileClick(file.id)}>
+        <tr key={file.id}>
           <td>{file.name}</td>
           <td>{file.description}</td>
           <td>{file.createdAt}</td>
-          <td>{file.versions[0].createdAt}</td>
         </tr>
       </tbody>
     </table>
