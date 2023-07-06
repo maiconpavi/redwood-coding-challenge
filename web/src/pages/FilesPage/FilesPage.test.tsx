@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import DropFilesPage from './DropFilesPage'
+import FilesPage from './FilesPage'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
 
-describe('DropFilesPage', () => {
+describe('FilesPage', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<DropFilesPage />)
+      render(<FilesPage />)
     }).not.toThrow()
   })
 })
