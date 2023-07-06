@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 export const DragDropText = styled.p`
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 400;
 `
 
 type FileUploadContainerProps = {
@@ -15,6 +15,7 @@ export const FileUploadContainer = styled.div<FileUploadContainerProps>`
   flex-direction: column;
   align-items: center;
   border-radius: 6px;
+  border: 2px dashed #202324;
   cursor: pointer;
 `
 
@@ -80,16 +81,20 @@ export const FileMetaData = styled.div`
   font-size: 14px;
 `
 
-export const RemoveFileIcon = styled(FontAwesomeIcon)`
-  margin-left: 10px;
-  color: red;
-  cursor: pointer;
-`
-
 export const InputLabel = styled.label`
   display: block;
   margin-bottom: 10px;
   font-weight: bold;
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
 `
 
 export const ModalOverlay = styled.div`
@@ -119,9 +124,27 @@ export const ModalContent = styled.div`
   z-index: 10000;
 `
 
+export const DeleteModalContent = styled.div`
+  background-color: rgb(32, 35, 36);
+  color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  width: 300px;
+  max-width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+`
+
 export const ModalTitle = styled.h2`
   font-size: 18px;
+  font-weight: 300;
   margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  text-align: center;
 `
 
 export const ModalInput = styled.input`
@@ -170,6 +193,9 @@ export const ModalCloseButton = styled.button`
   border: none;
   font-size: 24px;
   cursor: pointer;
+  &:hover {
+    color: #e06469;
+  }
 `
 
 export const ModalCloseIcon = styled(FontAwesomeIcon)`

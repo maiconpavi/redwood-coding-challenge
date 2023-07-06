@@ -4,8 +4,8 @@
 // ```tsx
 // import type { ComponentStory } from '@storybook/react'
 //
-// export const generated: ComponentStory<typeof FileVersion> = (args) => {
-//   return <FileVersion {...args} />
+// export const generated: ComponentStory<typeof DeleteModal> = (args) => {
+//   return <DeleteModal {...args} />
 // }
 // ```
 //
@@ -13,13 +13,13 @@
 
 import type { ComponentMeta } from '@storybook/react'
 
-import FileVersion from './FileVersion'
+import DeleteModal from './DeleteModal'
 
 export const generated = () => {
-  return <FileVersion />
+  return <DeleteModal />
 }
 
 export default {
-  title: 'Components/FileVersion',
-  component: FileVersion,
-} as ComponentMeta<typeof FileVersion>
+  title: 'Components/DeleteModal',
+  component: DeleteModal,
+} as ComponentMeta<typeof DeleteModal>

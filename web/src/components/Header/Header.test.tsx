@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import FileTable from './FileTable'
+import Header from './Header'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
-describe('FileTable', () => {
+describe('Header', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<FileTable />)
+      render(<Header />)
     }).not.toThrow()
   })
 })

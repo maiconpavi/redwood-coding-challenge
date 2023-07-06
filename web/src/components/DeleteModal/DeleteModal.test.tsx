@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import FileVersion from './FileVersion'
+import DeleteModal from './DeleteModal'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
-describe('FileVersion', () => {
+describe('DeleteModal', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<FileVersion />)
+      render(<DeleteModal />)
     }).not.toThrow()
   })
 })

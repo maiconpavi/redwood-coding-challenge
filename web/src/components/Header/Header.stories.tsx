@@ -4,8 +4,8 @@
 // ```tsx
 // import type { ComponentStory } from '@storybook/react'
 //
-// export const generated: ComponentStory<typeof FileTable> = (args) => {
-//   return <FileTable {...args} />
+// export const generated: ComponentStory<typeof Header> = (args) => {
+//   return <Header {...args} />
 // }
 // ```
 //
@@ -13,13 +13,13 @@
 
 import type { ComponentMeta } from '@storybook/react'
 
-import FileTable from './FileTable'
+import Header from './Header'
 
 export const generated = () => {
-  return <FileTable />
+  return <Header />
 }
 
 export default {
-  title: 'Components/FileTable',
-  component: FileTable,
-} as ComponentMeta<typeof FileTable>
+  title: 'Components/Header',
+  component: Header,
+} as ComponentMeta<typeof Header>

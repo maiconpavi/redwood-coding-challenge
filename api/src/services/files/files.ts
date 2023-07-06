@@ -5,6 +5,7 @@ import type {
 } from 'types/graphql'
 
 import { db } from 'src/lib/db'
+import { deleteFileVersionObjects } from 'src/lib/s3'
 
 export const files: QueryResolvers['files'] = () => {
   return db.file.findMany({
@@ -31,7 +32,11 @@ export const updateFile: MutationResolvers['updateFile'] = ({ id, input }) => {
   })
 }
 
-export const deleteFile: MutationResolvers['deleteFile'] = ({ id }) => {
+export const deleteFile: MutationResolvers['deleteFile'] = async ({ id }) => {
+  const versions = await db.file.findUnique({ where: { id } }).versions()
+  await db.fileVersion.deleteMany({ where: { fileId: id } })
+  await deleteFileVersionObjects(versions)
+
   return db.file.delete({
     where: { id },
   })

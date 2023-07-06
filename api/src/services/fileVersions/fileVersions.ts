@@ -1,8 +1,4 @@
-import {
-  S3Client,
-  PutObjectCommand,
-  GetObjectCommand,
-} from '@aws-sdk/client-s3'
+import { PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3'
 import * as presigner from '@aws-sdk/s3-request-presigner'
 import type {
   QueryResolvers,
@@ -11,10 +7,7 @@ import type {
 } from 'types/graphql'
 
 import { db } from 'src/lib/db'
-
-const client = new S3Client({ region: 'us-east-1' })
-
-const bucket = 'redwood-coding-challenge'
+import { CLIENT, BUCKET, deleteFileVersionObject } from 'src/lib/s3'
 
 export const fileVersions: QueryResolvers['fileVersions'] = () => {
   return db.fileVersion.findMany({
@@ -36,9 +29,9 @@ export const getSignedUrl: MutationResolvers['getSignedUrl'] = ({
   versionId,
 }) => {
   return presigner.getSignedUrl(
-    client,
+    CLIENT,
     new GetObjectCommand({
-      Bucket: bucket,
+      Bucket: BUCKET,
       Key: fileId.toString(),
       VersionId: versionId,
     }),
@@ -64,9 +57,9 @@ export const putSignedUrl: MutationResolvers['putSignedUrl'] = async ({
 
   return presigner
     .getSignedUrl(
-      client,
+      CLIENT,
       new PutObjectCommand({
-        Bucket: bucket,
+        Bucket: BUCKET,
         Key: fileId.toString(),
         ContentType: contentType,
       }),
@@ -101,14 +94,15 @@ export const updateFileVersion: MutationResolvers['updateFileVersion'] = ({
   })
 }
 
-export const deleteFileVersion: MutationResolvers['deleteFileVersion'] = ({
-  fileId,
-  versionId,
-}) => {
-  return db.fileVersion.delete({
-    where: { fileId_versionId: { fileId, versionId } },
-  })
-}
+export const deleteFileVersion: MutationResolvers['deleteFileVersion'] =
+  async ({ fileId, versionId }) => {
+    const fileVersion = await db.fileVersion.delete({
+      where: { fileId_versionId: { fileId, versionId } },
+    })
+    await deleteFileVersionObject(fileVersion)
+
+    return fileVersion
+  }
 
 export const FileVersion: FileVersionRelationResolvers = {
   File: (_obj, { root }) => {

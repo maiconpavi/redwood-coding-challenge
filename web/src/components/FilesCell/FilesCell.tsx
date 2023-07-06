@@ -1,8 +1,24 @@
-import { useState } from 'react'
-
+import { faTrash, faEye, faPencil } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import graphql from 'types/graphql'
 
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import {
+  type CellSuccessProps,
+  type CellFailureProps,
+  useMutation,
+} from '@redwoodjs/web'
+
+import {
+  NewRowInfos,
+  mapRowInfos,
+  setEditModalIsOpenForRowInfo,
+  setDeleteModalIsOpenForRowInfo,
+  filterRowInfos,
+} from 'src/lib/modal'
+import { DeleteBtn, DownloadBtn } from 'src/pages/HomePage/HomeStyles'
+
+import DeleteModal from '../DeleteModal/DeleteModal'
+import FileModal from '../FileModal/FileModal'
 
 export const QUERY = gql`
   query FilesQuery {
@@ -25,17 +41,88 @@ export const QUERY = gql`
 
 export const Loading = () => <div>Loading...</div>
 
-export const Empty = () => <div>Empty</div>
+export const Empty = () => (
+  <h1
+    style={{
+      marginTop: '70px',
+      marginBottom: '10px',
+      textShadow: '5px 3px 12px #777777',
+    }}
+  >
+    No files yet
+  </h1>
+)
 
 export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
-export const Success = ({ files }: CellSuccessProps<graphql.Query>) => {
-  const [selectedFile, setSelectedFile] = useState<graphql.File | null>(null)
+const DELETE_FILE_MUTATION = gql`
+  mutation DeleteMutation($id: Int!) {
+    deleteFile(id: $id) {
+      id
+      name
+      description
+      createdAt
+    }
+  }
+`
+
+const UPDATE_FILE_MUTATION = gql`
+  mutation UpdateFileMutation($id: Int!, $input: UpdateFileInput!) {
+    updateFile(id: $id, input: $input) {
+      id
+      name
+      description
+      createdAt
+    }
+  }
+`
+
+export const Success = (props: CellSuccessProps<graphql.Query>) => {
+  const [deleteFileMutation] = useMutation<
+    graphql.Mutation,
+    graphql.MutationdeleteFileArgs
+  >(DELETE_FILE_MUTATION)
+  const [updateFileMutation] = useMutation<
+    graphql.Mutation,
+    graphql.MutationupdateFileArgs
+  >(UPDATE_FILE_MUTATION)
+  const [files, setFiles] = React.useState(NewRowInfos(props.files))
+
+  const deleteFile = async (id: number) => {
+    await deleteFileMutation({
+      variables: { id },
+    })
+    setFiles(filterRowInfos(files, (row) => row.id !== id))
+  }
 
   const handleFileClick = (key: string) => {
     window.location.pathname = `/files/${key}`
+  }
+
+  const updateFile = async (id: number, name: string, description: string) => {
+    await updateFileMutation({
+      variables: {
+        id: id,
+        input: {
+          name: name,
+          description: description,
+        },
+      },
+    })
+    setFiles(
+      mapRowInfos(files, (row) => {
+        if (row.id !== id) {
+          return row
+        }
+        return {
+          ...row,
+          name: name,
+          description: description,
+        }
+      })
+    )
   }
 
   return (
@@ -46,26 +133,100 @@ export const Success = ({ files }: CellSuccessProps<graphql.Query>) => {
           <th>Description</th>
           <th>Created at</th>
           <th>Last version at</th>
+          <th>Edit</th>
+          <th>Delete</th>
+
+          <th>Open Versions</th>
         </tr>
       </thead>
       <tbody>
-        {files.map((item) => {
-          return (
-            <tr
-              key={item.id}
-              onClick={() => handleFileClick(item.id.toString())}
-            >
-              <td>{item.name}</td>
-              <td>{item.description}</td>
-              <td>{new Date(item.createdAt).toLocaleString()}</td>
-              <td>
-                {item.versions && item.versions.length > 0
-                  ? new Date(item.versions[0].createdAt).toLocaleString()
-                  : 'No version'}
-              </td>
-            </tr>
-          )
-        })}
+        {files.map(
+          ({ row, editModalIsOpen: modalIsOpen, deleteModalIsOpen }) => {
+            return (
+              <tr key={row.id}>
+                <td>{row.name}</td>
+                <td>{row.description}</td>
+                <td>{new Date(row.createdAt).toLocaleString()}</td>
+                <td>
+                  {row.versions && row.versions.length > 0
+                    ? new Date(row.versions[0].createdAt).toLocaleString()
+                    : 'No version'}
+                </td>
+                <td>
+                  <DownloadBtn
+                    onClick={async () => {
+                      setFiles(
+                        setEditModalIsOpenForRowInfo(
+                          files,
+                          (f) => f.id === row.id,
+                          true
+                        )
+                      )
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faPencil} />
+                  </DownloadBtn>
+                  <FileModal
+                    isOpen={modalIsOpen}
+                    onClose={() =>
+                      setFiles(
+                        setEditModalIsOpenForRowInfo(
+                          files,
+                          (f) => f.id === row.id,
+                          false
+                        )
+                      )
+                    }
+                    fileId={row.id}
+                    onSave={async (name, description, _) => {
+                      await updateFile(row.id, name, description)
+                    }}
+                    existingName={row.name}
+                    existingDescription={row.description}
+                  />
+                </td>
+                <td>
+                  <DeleteBtn
+                    onClick={async () => {
+                      setFiles(
+                        setDeleteModalIsOpenForRowInfo(
+                          files,
+                          (f) => f.id === row.id,
+                          true
+                        )
+                      )
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </DeleteBtn>
+                  <DeleteModal
+                    isOpen={deleteModalIsOpen}
+                    onClose={() =>
+                      setFiles(
+                        setDeleteModalIsOpenForRowInfo(
+                          files,
+                          (f) => f.id === row.id,
+                          false
+                        )
+                      )
+                    }
+                    onSubmit={async () => {
+                      await deleteFile(row.id)
+                    }}
+                  />
+                </td>
+
+                <td>
+                  <DownloadBtn
+                    onClick={() => handleFileClick(row.id.toString())}
+                  >
+                    <FontAwesomeIcon icon={faEye} />
+                  </DownloadBtn>
+                </td>
+              </tr>
+            )
+          }
+        )}
       </tbody>
     </table>
   )

@@ -104,16 +104,24 @@ export const FilePreviewContainer = styled.table`
   th,
   td {
     padding: 10px;
-    text-align: left;
+    text-align: center;
+
+    min-width: 100px;
+    max-width: 300px;
   }
 
   tr {
     border: 3px solid #474e68;
-    cursor: pointer;
 
     &:hover {
       background-color: #474e68;
       border-radius: 6px;
+    }
+  }
+
+  &Version {
+    tr {
+      cursor: default;
     }
   }
 
@@ -265,5 +273,82 @@ export const SubmitButton = styled.button`
     opacity: 0.4;
     pointer-events: none;
   }
-}
+}`
+
+export const Container = styled.section`
+  position: relative;
+  padding: 35px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(180deg, #6b728e, rgb(32, 35, 36));
+`
+
+export const Title = styled.h2`
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+`
+
+export const SubTitle = styled.h3`
+  margin-top: 10px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #fff;
+`
+
+export const DownloadBtn = styled.button`
+  border: none;
+  outline: none;
+  padding: 10px 10px;
+  border-radius: 5px;
+  color: rgb(32, 35, 36);
+  background-color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #e2e8f0;
+    transform: scale(1.1);
+  }
+`
+
+export const DeleteBtn = styled.button`
+  border: none;
+  outline: none;
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: #e06469;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    background-color: #e0646952;
+    transform: scale(1.1);
+  }
+`
+
+export const Description = styled.p`
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #fff;
+`
+
+export const BackBtn = styled.button`
+  position: absolute;
+  border: none;
+  outline: none;
+  top: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: rgb(32, 35, 36);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
 `
