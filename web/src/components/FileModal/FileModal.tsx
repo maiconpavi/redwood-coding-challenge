@@ -51,6 +51,8 @@ const FileModal: React.FC<ModalProps> = ({ isOpen, onClose, fileId }) => {
   const [description, setDescription] = useState<string>('')
   const [isDragging, setIsDragging] = useState(false)
 
+  const isUploadDisabled = !name || !file
+
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>): void => {
     e.preventDefault()
     setIsDragging(true)
@@ -103,7 +105,9 @@ const FileModal: React.FC<ModalProps> = ({ isOpen, onClose, fileId }) => {
   return (
     <ModalOverlay style={{ display: isOpen ? 'block' : 'none' }}>
       <ModalContent>
-        <ModalTitle>Upload File</ModalTitle>
+        <ModalTitle>
+          {fileId ? 'Upload a new version' : 'Upload a new file'}
+        </ModalTitle>
         <FileUploadContainer
           isDragging={isDragging}
           onDragEnter={handleDragEnter}
@@ -137,6 +141,7 @@ const FileModal: React.FC<ModalProps> = ({ isOpen, onClose, fileId }) => {
           }
         />
         <UploadFileBtn
+          disabled={isUploadDisabled}
           onClick={async () => {
             const currentFileId =
               fileId ?? (await createFile(name, description)).id

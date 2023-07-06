@@ -27,6 +27,8 @@ export const UploadFileBtn = styled.button`
   border: none;
   font-size: 15px;
   cursor: pointer;
+  opacity: ${(props) => (props.disabled ? '0.5' : '1')};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
 `
 
 export const FilePreviewContainer = styled.div`
