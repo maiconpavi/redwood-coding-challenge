@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent } from 'react'
 
-import { faClose } from '@fortawesome/free-solid-svg-icons'
+import { faClose, faFile, faUpload } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import graphql from 'types/graphql'
 
@@ -13,12 +13,19 @@ import {
 } from 'src/lib/uploader'
 
 import {
+  FormField,
   ModalOverlay,
   ModalContent,
   ModalInput,
   UploadFileBtn,
   ModalCloseButton,
   ModalTitle,
+  FilePreviewContainer,
+  DocumentIcon,
+  UploadIcon,
+  FileUploadContainer,
+  DragDropText,
+  InputLabel,
 } from './modalStyles'
 
 interface ModalProps {
@@ -42,6 +49,26 @@ const FileModal: React.FC<ModalProps> = ({ isOpen, onClose, fileId }) => {
   const [file, setFile] = useState<File | null>(null)
   const [name, setName] = useState<string>('')
   const [description, setDescription] = useState<string>('')
+  const [isDragging, setIsDragging] = useState(false)
+
+  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>): void => {
+    e.preventDefault()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>): void => {
+    e.preventDefault()
+    setIsDragging(false)
+  }
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>): void => {
+    e.preventDefault()
+    setIsDragging(false)
+    const { files } = e.dataTransfer
+    if (files && files.length > 0) {
+      setFile(files[0])
+    }
+  }
 
   const [createFileMutation] = useMutation<
     graphql.Mutation,
@@ -77,8 +104,26 @@ const FileModal: React.FC<ModalProps> = ({ isOpen, onClose, fileId }) => {
     <ModalOverlay style={{ display: isOpen ? 'block' : 'none' }}>
       <ModalContent>
         <ModalTitle>Upload File</ModalTitle>
-        <input type="file" onChange={handleFileChange} />
-
+        <FileUploadContainer
+          isDragging={isDragging}
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
+          onDragOver={(e: { preventDefault: () => void }) => e.preventDefault()}
+          onDrop={handleDrop}
+        >
+          <UploadIcon icon={faUpload} />
+          <DragDropText>Drag and drop a file here or</DragDropText>
+          <InputLabel htmlFor="fileInput">Browse your File</InputLabel>
+          <FormField type="file" id="fileInput" onChange={handleFileChange} />
+        </FileUploadContainer>
+        <FilePreviewContainer>
+          {file && (
+            <>
+              <DocumentIcon icon={faFile} />
+              <span>{file.name}</span>
+            </>
+          )}
+        </FilePreviewContainer>
         <ModalInput
           placeholder="Name"
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -110,7 +155,6 @@ const FileModal: React.FC<ModalProps> = ({ isOpen, onClose, fileId }) => {
         >
           Upload
         </UploadFileBtn>
-
         <ModalCloseButton onClick={onClose}>
           <FontAwesomeIcon icon={faClose} />
         </ModalCloseButton>

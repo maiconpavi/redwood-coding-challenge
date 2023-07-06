@@ -1,33 +1,56 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components'
 
-export const FileUploadContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  border: 2px dashed #ccc;
-  cursor: pointer;
-`
-
 export const DragDropText = styled.p`
   font-size: 16px;
   font-weight: bold;
 `
 
+type FileUploadContainerProps = {
+  isDragging: boolean
+}
+
+export const FileUploadContainer = styled.div<FileUploadContainerProps>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 6px;
+  cursor: pointer;
+`
+
 export const UploadFileBtn = styled.button`
-  position: absolute;
   border-radius: 3px;
-  back: 10px;
-  right: 10px;
-  color: #fff;
+  float: right;
+  padding: 5px;
+  color: 333;
+  background-color: white;
   border: none;
-  font-size: 24px;
+  font-size: 15px;
   cursor: pointer;
 `
 
 export const FilePreviewContainer = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  justify-content: center;
   margin-top: 20px;
+  margin-bottom: 15px;
+`
+
+export const DocumentIcon = styled(FontAwesomeIcon)`
+  font-size: 20px;
+  margin-right: 5px;
+`
+
+export const UploadIcon = styled(FontAwesomeIcon)`
+  border-radius: 50%;
+  margin-bottom: 10px;
+  background-color: #ccc;
+  padding: 10px;
+  color: #333;
+  font-size: 20px;
+  margin-right: 5px;
 `
 
 export const PreviewList = styled.div`
@@ -46,10 +69,6 @@ export const ImagePreview = styled.img`
   width: 100px;
   height: 100px;
   object-fit: cover;
-`
-
-export const DocumentIcon = styled(FontAwesomeIcon)`
-  font-size: 50px;
 `
 
 export const FileMetaData = styled.div`
@@ -104,6 +123,8 @@ export const ModalTitle = styled.h2`
 `
 
 export const ModalInput = styled.input`
+  background-color: transparent;
+  color: #fff;
   display: block;
   width: 100%;
   padding: 10px;
@@ -113,20 +134,13 @@ export const ModalInput = styled.input`
 `
 
 export const FormField = styled.input`
-  font-size: 18px;
-  display: block;
-  width: 100%;
-  border: none;
-  text-transform: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  opacity: 0;
+  &:label {
+    background-color: #ccc;
+    color: #fff;
+  }
 
-  &:focus {
-    outline: none;
+  &[type='file'] {
+    display: none;
   }
 `
 
