@@ -12,24 +12,6 @@ export const FileUploadContainer = styled.section`
   background-color: #202324;
 `
 
-export const FormField = styled.input`
-  font-size: 18px;
-  display: block;
-  width: 100%;
-  border: none;
-  text-transform: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  opacity: 0;
-
-  &:focus {
-    outline: none;
-  }
-`
-
 export const InputLabel = styled.label`
   top: -21px;
   font-size: 13px;
@@ -64,18 +46,14 @@ const pulseAnimation = keyframes`
 `
 
 export const UploadFileBtn = styled.button`
-  width: 50px;
-  height: 70px;
   box-sizing: border-box;
+  padding: 1rem;
   appearance: none;
   background-color: transparent;
   border: 2px solid rgb(55, 60, 62);
   cursor: pointer;
-  font-size: 1rem;
   line-height: 1;
-  padding: 1em 2.2em;
   text-align: center;
-  text-transform: uppercase;
   font-weight: 700;
   border-radius: 50%;
   color: rgb(232, 230, 227);
@@ -88,20 +66,13 @@ export const UploadFileBtn = styled.button`
   align-items: center;
   justify-content: center;
 
-  .upload-icon {
-    font-size: 22px;
-  }
-
   @media only screen and (max-width: 768px) {
-    width: 60%;
   }
 
   @media only screen and (max-width: 500px) {
-    width: 70%;
   }
 
   @media only screen and (max-width: 350px) {
-    width: 90%;
     padding: 1em;
   }
 
@@ -120,13 +91,15 @@ export const UploadFileBtn = styled.button`
   }
 `
 
-export const FilePreviewContainer = styled.article`
-  margin-bottom: 35px;
+export const FilePreviewContainer = styled.table`
+  margin-top: 20px;
+  display: flex;
+  border-collapse: collapse;
+  color: white;
 
-  span {
-    color: white;
-    font-weight: bold;
-    font-size: 13px;
+  th,
+  td {
+    padding: 10px;
   }
 `
 

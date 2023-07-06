@@ -1,4 +1,4 @@
-import React, { useRef, useState, ChangeEvent } from 'react'
+import React, { useState, ChangeEvent } from 'react'
 
 import { faClose } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -6,7 +6,11 @@ import graphql from 'types/graphql'
 
 import { useMutation } from '@redwoodjs/web'
 
-import { PUT_SIGNED_URL, getFileHash, putObject } from 'src/lib/uploader'
+import {
+  createFileVersion,
+  getPutSignedUrlMutation,
+  getcreateFileVersionMutation,
+} from 'src/lib/uploader'
 
 import {
   ModalOverlay,
@@ -20,6 +24,7 @@ import {
 interface ModalProps {
   isOpen: boolean
   onClose: () => void
+  fileId?: number
 }
 
 const CREATE_FILE_MUTATION = gql`
@@ -33,21 +38,7 @@ const CREATE_FILE_MUTATION = gql`
   }
 `
 
-const CREATE_FILE_VERSION_MUTATION = gql`
-  mutation CreateFileVersionMutation($input: CreateFileVersionInput!) {
-    createFileVersion(input: $input) {
-      fileId
-      versionId
-      hash
-      name
-      description
-      createdAt
-    }
-  }
-`
-
-const FileModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
-  const fileInputField = useRef<HTMLInputElement | null>(null)
+const FileModal: React.FC<ModalProps> = ({ isOpen, onClose, fileId }) => {
   const [file, setFile] = useState<File | null>(null)
   const [name, setName] = useState<string>('')
   const [description, setDescription] = useState<string>('')
@@ -72,53 +63,8 @@ const FileModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     return response.data?.createFile
   }
 
-  const [putSignedUrl] = useMutation<
-    graphql.Mutation,
-    graphql.PutSignedUrlQueryVariables
-  >(PUT_SIGNED_URL)
-  const [createFileVersionMutation] = useMutation<
-    graphql.Mutation,
-    graphql.MutationcreateFileVersionArgs
-  >(CREATE_FILE_VERSION_MUTATION)
-
-  const createFileVersion = async (
-    file: graphql.File,
-    data: Blob,
-    name: string,
-    description?: string
-  ): Promise<graphql.FileVersion> => {
-    const hash = await getFileHash(data)
-    const response = (
-      await putSignedUrl({
-        variables: {
-          input: {
-            fileId: file.id,
-            hash,
-            contentType: data.type,
-          },
-        },
-      })
-    ).data?.putSignedUrl
-    if (response.signedUrl) {
-      const versionId = await putObject(response.signedUrl, data)
-      return (
-        await createFileVersionMutation({
-          variables: {
-            input: {
-              fileId: file.id,
-              versionId,
-              hash,
-              name,
-              description,
-            },
-          },
-        })
-      ).data?.createFileVersion
-    } else if (response.fileVersion) {
-      // TODO: make a toast
-      return response.fileVersion
-    }
-  }
+  const putSignedUrl = getPutSignedUrlMutation()
+  const createFileVersionMutation = getcreateFileVersionMutation()
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { files } = e.target
@@ -131,13 +77,40 @@ const FileModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     <ModalOverlay style={{ display: isOpen ? 'block' : 'none' }}>
       <ModalContent>
         <ModalTitle>Upload File</ModalTitle>
+        <input type="file" onChange={handleFileChange} />
 
+        <ModalInput
+          placeholder="Name"
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setName(e.target.value)
+          }
+        />
+        <ModalInput
+          placeholder="Description"
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setDescription(e.target.value)
+          }
+        />
         <UploadFileBtn
-          type="button"
-          onClick={() => fileInputField.current?.click()}
+          onClick={async () => {
+            const currentFileId =
+              fileId ?? (await createFile(name, description)).id
+            console.log(
+              await createFileVersion(
+                putSignedUrl,
+                createFileVersionMutation,
+                currentFileId,
+                file,
+                name,
+                description
+              )
+            )
+            window.location.pathname = `/files/${currentFileId}`
+          }}
         >
-          Choose File
+          Upload
         </UploadFileBtn>
+
         <ModalCloseButton onClick={onClose}>
           <FontAwesomeIcon icon={faClose} />
         </ModalCloseButton>

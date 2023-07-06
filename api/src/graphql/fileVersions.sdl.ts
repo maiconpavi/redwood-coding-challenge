@@ -37,7 +37,7 @@ export const schema = gql`
   }
 
   type PutSignedUrl {
-    signedUrl: String
+    putSignedUrl: String
     fileVersion: FileVersion
   }
 
@@ -50,7 +50,6 @@ export const schema = gql`
     ): FileVersion! @skipAuth
     deleteFileVersion(fileId: Int!, versionId: String!): FileVersion! @skipAuth
     putSignedUrl(input: PutSignedUrlInput!): PutSignedUrl @skipAuth
-    getSignedUrl(input: PutSignedUrlInput!): PutSignedUrl @skipAuth
-
+    getSignedUrl(fileId: Int!, versionId: String!): String @skipAuth
   }
 `

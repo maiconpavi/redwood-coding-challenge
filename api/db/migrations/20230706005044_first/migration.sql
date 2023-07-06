@@ -1,13 +1,14 @@
 -- CreateTable
 CREATE TABLE "FileVersion" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "fileId" INTEGER NOT NULL,
     "versionId" TEXT NOT NULL,
     "hash" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "fileId" INTEGER,
-    CONSTRAINT "FileVersion_fileId_fkey" FOREIGN KEY ("fileId") REFERENCES "File" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+
+    PRIMARY KEY ("fileId", "versionId"),
+    CONSTRAINT "FileVersion_fileId_fkey" FOREIGN KEY ("fileId") REFERENCES "File" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -19,4 +20,10 @@ CREATE TABLE "File" (
 );
 
 -- CreateIndex
+CREATE INDEX "FileVersion_createdAt_idx" ON "FileVersion"("createdAt" DESC);
+
+-- CreateIndex
 CREATE UNIQUE INDEX "FileVersion_fileId_hash_key" ON "FileVersion"("fileId", "hash");
+
+-- CreateIndex
+CREATE INDEX "File_createdAt_idx" ON "File"("createdAt" DESC);

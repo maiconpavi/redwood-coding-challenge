@@ -1,5 +1,9 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} from '@aws-sdk/client-s3'
+import * as presigner from '@aws-sdk/s3-request-presigner'
 import type {
   QueryResolvers,
   MutationResolvers,
@@ -7,9 +11,9 @@ import type {
 } from 'types/graphql'
 
 import { db } from 'src/lib/db'
-import { logger } from 'src/lib/logger'
 
 const client = new S3Client({ region: 'us-east-1' })
+
 const bucket = 'redwood-coding-challenge'
 
 export const fileVersions: QueryResolvers['fileVersions'] = () => {
@@ -27,37 +31,55 @@ export const fileVersion: QueryResolvers['fileVersion'] = ({
   })
 }
 
-export const putSignedUrl: MutationResolvers['putSignedUrl'] = async ({
-  input: { fileId, hash, contentType },
+export const getSignedUrl: MutationResolvers['getSignedUrl'] = ({
+  fileId,
+  versionId,
 }) => {
-  logger.info(`fileId ${fileId}`)
-  const existingFileVersion = await db.fileVersion.findUnique({
-    where: { fileId_hash: { fileId, hash } },
-  })
-  logger.info(`existingFileVersion ${JSON.stringify(existingFileVersion)}`)
-
-  if (existingFileVersion) {
-    return {
-      fileVersion: existingFileVersion,
-    }
-  }
-
-  return getSignedUrl(
+  return presigner.getSignedUrl(
     client,
-    new PutObjectCommand({
+    new GetObjectCommand({
       Bucket: bucket,
       Key: fileId.toString(),
-      ContentType: contentType,
+      VersionId: versionId,
     }),
     {
       expiresIn: 3600,
     }
-  ).then((signedUrl) => {
-    logger.info(`signedUrl ${signedUrl}`)
-    return {
-      signedUrl,
-    }
+  )
+}
+
+export const putSignedUrl: MutationResolvers['putSignedUrl'] = async ({
+  input: { fileId, hash, contentType },
+}) => {
+  const existingFileVersion = await db.fileVersion.findUnique({
+    where: { fileId_hash: { fileId, hash } },
   })
+
+  if (existingFileVersion) {
+    return {
+      putSignedUrl: null,
+      fileVersion: existingFileVersion,
+    }
+  }
+
+  return presigner
+    .getSignedUrl(
+      client,
+      new PutObjectCommand({
+        Bucket: bucket,
+        Key: fileId.toString(),
+        ContentType: contentType,
+      }),
+      {
+        expiresIn: 3600,
+      }
+    )
+    .then((putSignedUrl) => {
+      return {
+        putSignedUrl,
+        fileVersion: null,
+      }
+    })
 }
 
 export const createFileVersion: MutationResolvers['createFileVersion'] = ({

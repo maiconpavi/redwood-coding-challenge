@@ -16,15 +16,13 @@ export const DragDropText = styled.p`
 `
 
 export const UploadFileBtn = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-  background-color: #ccc;
+  position: absolute;
+  border-radius: 3px;
+  back: 10px;
+  right: 10px;
+  color: #fff;
   border: none;
-  border-radius: 50%;
-  margin-left: 10px;
+  font-size: 24px;
   cursor: pointer;
 `
 
@@ -87,7 +85,7 @@ export const ModalOverlay = styled.div`
 `
 
 export const ModalContent = styled.div`
-  background-color: #333;
+  background-color: rgb(32, 35, 36);
   color: #fff;
   padding: 20px;
   border-radius: 4px;
@@ -112,6 +110,24 @@ export const ModalInput = styled.input`
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+`
+
+export const FormField = styled.input`
+  font-size: 18px;
+  display: block;
+  width: 100%;
+  border: none;
+  text-transform: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+
+  &:focus {
+    outline: none;
+  }
 `
 
 export const ModalButtonContainer = styled.div`

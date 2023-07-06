@@ -1,6 +1,8 @@
 import graphql from 'types/graphql'
 
-import { useQuery } from '@redwoodjs/web'
+import { useMutation, useQuery } from '@redwoodjs/web'
+
+import { GET_SIGNED_URL } from 'src/lib/uploader'
 
 interface FileVersionProps {
   fileId: number
@@ -28,6 +30,22 @@ const FileVersion = (props: FileVersionProps) => {
   >(QUERY, {
     variables: { fileId: props.fileId, versionId: props.versionId },
   })
+  const [getSignedUrl] = useMutation<
+    graphql.Mutation,
+    graphql.MutationgetSignedUrlArgs
+  >(GET_SIGNED_URL)
+
+  const getSignedUrlForDownload = async (): Promise<string> => {
+    return (
+      await getSignedUrl({
+        variables: {
+          fileId: props.fileId,
+          versionId: props.versionId,
+        },
+      })
+    ).data?.getSignedUrl
+  }
+
   if (error) {
     return <div>Error: {error.message}</div>
   }
@@ -45,6 +63,14 @@ const FileVersion = (props: FileVersionProps) => {
       <h2>{data.fileVersion?.name}</h2>
       <p>{data.fileVersion?.description ?? 'No Description'}</p>
       <p>Created at: {date.toLocaleDateString()}</p>
+      <p>Hash: {data.fileVersion?.hash}</p>
+      <button
+        onClick={async (_) => {
+          window.open(await getSignedUrlForDownload())
+        }}
+      >
+        Download
+      </button>
     </div>
   )
 }
