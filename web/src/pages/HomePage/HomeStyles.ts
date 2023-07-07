@@ -93,43 +93,102 @@ export const UploadFileBtn = styled.button`
   }
 `
 
-export const FilePreviewContainer = styled.table`
+export const FilePreviewContainer = styled.div`
   margin: 20px 0px;
   display: flex;
   justify-content: center;
-  border-collapse: collapse;
   color: white;
   overflow-x: auto;
   width: 100%;
 
+  @media only screen and (max-width: 768px) {
+    display: block;
+    justify-content: center;
+    margin: auto;
+  }
+`
 
-  th,
+export const FilePreviewTable = styled.table`
+border-collapse: collapse;
+margin: 15px 0px;
+
+th,
   td {
     padding: 10px;
     text-align: center;
-    min-width: 100px;
+    min-width: 150px;
     max-width: 300px;
     border-radius: 6px;
+    width: 40%;
+    word-wrap: break-word;
   }
-
-
-
-
 
   tr {
     border-radius: 6px;
-    box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.3), 0px 0px 1px 0px rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid #ffffff4f;
+    border-right: 1px solid #ffffff4f;
+
+    background-color: #202324;
 
   &Version {
     tr {
       cursor: default;
+
     }
   }
 
   @media only screen and (max-width: 768px) {
     display: none;
   }
+`
 
+export const MobileFilePreviewContainer = styled.ul`
+  margin: 20px auto;
+  display: block;
+  justify-content: left;
+  padding: 15px;
+  font-size: 12px;
+  color: white;
+  overflow-x: auto;
+  width: 95%;
+  border-radius: 6px;
+  box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.3), 0px 0px 1px 0px rgba(0, 0, 0, 0.3);
+  background-color: #202324;
+
+  li {
+    list-style-type: none;
+    margin-bottom: 10px;
+
+    &:first-child {
+      display: flex;
+      justify-content: end;
+    }
+  }
+
+  h4 {
+    margin-bottom: 5px;
+    width: 100%;
+    word-wrap: break-word;
+  }
+
+  p {
+    margin-bottom: 15px;
+    width: 100%;
+    word-wrap: break-word;
+  }
+
+  @media only screen and (min-width: 768px) {
+    display: none;
+  }
+`
+
+export const ListBtnRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  h4 {
+    margin-bottom: 5px;
+  }
 `
 
 export const PreviewList = styled.section`
@@ -140,7 +199,7 @@ export const PreviewList = styled.section`
   flex-wrap: wrap;
   margin: 10px auto;
 
-  @media only screen and (max-width: 400px) {
+  @media only screen and (max-width: 768px) {
     flex-direction: column;
   }
 `

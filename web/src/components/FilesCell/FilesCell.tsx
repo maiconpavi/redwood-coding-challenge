@@ -15,7 +15,13 @@ import {
   setDeleteModalIsOpenForRowInfo,
   filterRowInfos,
 } from 'src/lib/modal'
-import { DeleteBtn, DownloadBtn } from 'src/pages/HomePage/HomeStyles'
+import {
+  DeleteBtn,
+  DownloadBtn,
+  FilePreviewTable,
+  ListBtnRow,
+  MobileFilePreviewContainer,
+} from 'src/pages/HomePage/HomeStyles'
 
 import DeleteModal from '../DeleteModal/DeleteModal'
 import FileModal from '../FileModal/FileModal'
@@ -128,70 +134,176 @@ export const Success = (props: CellSuccessProps<graphql.Query>) => {
   }
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Created at</th>
-          <th>Last version at</th>
-          <th>Edit</th>
-          <th>Delete</th>
+    <>
+      <FilePreviewTable>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Created at</th>
+            <th>Last version at</th>
+            <th>Edit</th>
+            <th>Delete</th>
 
-          <th>Open Versions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {files.map(
-          ({ row, editModalIsOpen: modalIsOpen, deleteModalIsOpen }) => {
-            return (
-              <tr key={row.id}>
-                <td>{row.name}</td>
-                <td>
-                  {row.description == null || row.description == ''
-                    ? 'No description'
-                    : row.description}
-                </td>
-                <td>{new Date(row.createdAt).toLocaleString()}</td>
-                <td>
-                  {row.versions && row.versions.length > 0
-                    ? new Date(row.versions[0].createdAt).toLocaleString()
-                    : 'No version'}
-                </td>
-                <td>
-                  <DownloadBtn
-                    onClick={async () => {
-                      setFiles(
-                        setEditModalIsOpenForRowInfo(
-                          files,
-                          (f) => f.id === row.id,
-                          true
+            <th>Open Versions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {files.map(
+            ({ row, editModalIsOpen: modalIsOpen, deleteModalIsOpen }) => {
+              return (
+                <tr key={row.id}>
+                  <td>{row.name}</td>
+                  <td>
+                    {row.description == null || row.description == ''
+                      ? 'No description'
+                      : row.description}
+                  </td>
+                  <td>{new Date(row.createdAt).toLocaleString()}</td>
+                  <td>
+                    {row.versions && row.versions.length > 0
+                      ? new Date(row.versions[0].createdAt).toLocaleString()
+                      : 'No version'}
+                  </td>
+                  <td>
+                    <DownloadBtn
+                      onClick={async () => {
+                        setFiles(
+                          setEditModalIsOpenForRowInfo(
+                            files,
+                            (f) => f.id === row.id,
+                            true
+                          )
                         )
-                      )
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faPencil} />
-                  </DownloadBtn>
-                  <FileModal
-                    isOpen={modalIsOpen}
-                    onClose={() =>
-                      setFiles(
-                        setEditModalIsOpenForRowInfo(
-                          files,
-                          (f) => f.id === row.id,
-                          false
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faPencil} />
+                    </DownloadBtn>
+                    <FileModal
+                      isOpen={modalIsOpen}
+                      onClose={() =>
+                        setFiles(
+                          setEditModalIsOpenForRowInfo(
+                            files,
+                            (f) => f.id === row.id,
+                            false
+                          )
                         )
-                      )
-                    }
-                    fileId={row.id}
-                    onSave={async (name, description, _) => {
-                      await updateFile(row.id, name, description)
-                    }}
-                    existingName={row.name}
-                    existingDescription={row.description}
-                  />
-                </td>
-                <td>
+                      }
+                      fileId={row.id}
+                      onSave={async (name, description, _) => {
+                        await updateFile(row.id, name, description)
+                      }}
+                      existingName={row.name}
+                      existingDescription={row.description}
+                    />
+                  </td>
+                  <td>
+                    <DeleteBtn
+                      onClick={async () => {
+                        setFiles(
+                          setDeleteModalIsOpenForRowInfo(
+                            files,
+                            (f) => f.id === row.id,
+                            true
+                          )
+                        )
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </DeleteBtn>
+                    <DeleteModal
+                      isOpen={deleteModalIsOpen}
+                      onClose={() =>
+                        setFiles(
+                          setDeleteModalIsOpenForRowInfo(
+                            files,
+                            (f) => f.id === row.id,
+                            false
+                          )
+                        )
+                      }
+                      onSubmit={async () => {
+                        await deleteFile(row.id)
+                      }}
+                    />
+                  </td>
+
+                  <td>
+                    <DownloadBtn
+                      onClick={() => handleFileClick(row.id.toString())}
+                    >
+                      <FontAwesomeIcon icon={faEye} />
+                    </DownloadBtn>
+                  </td>
+                </tr>
+              )
+            }
+          )}
+        </tbody>
+      </FilePreviewTable>
+
+      {files.map(({ row, editModalIsOpen, deleteModalIsOpen }) => {
+        return (
+          <MobileFilePreviewContainer key={row.id}>
+            <li>
+              <DownloadBtn
+                onClick={async () => {
+                  setFiles(
+                    setEditModalIsOpenForRowInfo(
+                      files,
+                      (f) => f.id === row.id,
+                      true
+                    )
+                  )
+                }}
+              >
+                <FontAwesomeIcon icon={faPencil} />
+              </DownloadBtn>
+              <FileModal
+                isOpen={editModalIsOpen}
+                onClose={() =>
+                  setFiles(
+                    setEditModalIsOpenForRowInfo(
+                      files,
+                      (f) => f.id === row.id,
+                      false
+                    )
+                  )
+                }
+                fileId={row.id}
+                onSave={async (name, description, _) => {
+                  await updateFile(row.id, name, description)
+                }}
+                existingName={row.name}
+                existingDescription={row.description}
+              />
+            </li>
+            <li>
+              <h4>Version Name</h4>
+              <p>{row.name}</p>
+            </li>
+            <li>
+              <h4>Version Description</h4>
+              <p>
+                {row.description == null || row.description == ''
+                  ? 'No description'
+                  : row.description}
+              </p>
+            </li>
+            <li>
+              <h4>Created at</h4>
+              <p>{new Date(row.createdAt).toLocaleString()}</p>
+            </li>
+            <li>
+              <ListBtnRow>
+                <div
+                  style={{
+                    textAlign: 'center',
+                    width: '50%',
+                  }}
+                >
+                  <h4>Delete</h4>
                   <DeleteBtn
                     onClick={async () => {
                       setFiles(
@@ -220,20 +332,21 @@ export const Success = (props: CellSuccessProps<graphql.Query>) => {
                       await deleteFile(row.id)
                     }}
                   />
-                </td>
-
-                <td>
-                  <DownloadBtn
-                    onClick={() => handleFileClick(row.id.toString())}
-                  >
-                    <FontAwesomeIcon icon={faEye} />
+                </div>
+                <div style={{ textAlign: 'center', width: '50%' }}>
+                  <h4>Open Versions</h4>
+                  <DownloadBtn>
+                    <FontAwesomeIcon
+                      icon={faEye}
+                      onClick={() => handleFileClick(row.id.toString())}
+                    />
                   </DownloadBtn>
-                </td>
-              </tr>
-            )
-          }
-        )}
-      </tbody>
-    </table>
+                </div>
+              </ListBtnRow>
+            </li>
+          </MobileFilePreviewContainer>
+        )
+      })}
+    </>
   )
 }
