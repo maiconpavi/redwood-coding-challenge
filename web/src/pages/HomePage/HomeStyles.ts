@@ -102,9 +102,7 @@ export const FilePreviewContainer = styled.table`
   overflow-x: auto;
   width: 100%;
 
-  thead tr{
-    margin-bottom: 10px;
-  }
+
   th,
   td {
     padding: 10px;
@@ -114,11 +112,9 @@ export const FilePreviewContainer = styled.table`
     border-radius: 6px;
   }
 
-  th {
-    background-color: rgb(32, 35, 36);
-    position: sticky;
-    border-radius: 6px;
-  }
+
+
+
 
   tr {
     border-radius: 6px;

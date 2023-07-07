@@ -147,7 +147,11 @@ export const Success = (props: CellSuccessProps<graphql.Query>) => {
             return (
               <tr key={row.id}>
                 <td>{row.name}</td>
-                <td>{row.description ?? 'No description'}</td>
+                <td>
+                  {row.description == null || row.description == ''
+                    ? 'No description'
+                    : row.description}
+                </td>
                 <td>{new Date(row.createdAt).toLocaleString()}</td>
                 <td>
                   {row.versions && row.versions.length > 0
