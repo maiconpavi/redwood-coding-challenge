@@ -139,6 +139,13 @@ export const ModalContent = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10000;
+
+  @media (max-width: 768px) {
+    width: 90%;
+    margin: 0 auto;
+    display: block;
+    justify-content: center;
+  }
 `
 
 export const DeleteModalContent = styled.div`
