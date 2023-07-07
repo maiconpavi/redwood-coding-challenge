@@ -118,7 +118,6 @@ th,
     text-align: center;
     min-width: 150px;
     max-width: 300px;
-    border-radius: 6px;
     width: 40%;
     word-wrap: break-word;
   }
