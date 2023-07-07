@@ -17,6 +17,7 @@ import {
   FileUploadContainer,
   DragDropText,
   InputLabel,
+  Loader,
 } from './modalStyles'
 
 interface ModalProps {
@@ -66,6 +67,7 @@ const FileModal: React.FC<ModalProps> = (props) => {
     return (
       <ModalOverlay style={{ display: props.isOpen ? 'block' : 'none' }}>
         <ModalContent>
+          <Loader />
           <ModalTitle>Uploading...</ModalTitle>
         </ModalContent>
       </ModalOverlay>

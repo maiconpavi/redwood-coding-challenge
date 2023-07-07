@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 export const DragDropText = styled.p`
   font-size: 16px;
@@ -39,6 +39,21 @@ export const FilePreviewContainer = styled.div`
   justify-content: center;
   margin-top: 20px;
   margin-bottom: 15px;
+`
+
+const spinAnimation = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`
+
+export const Loader = styled.div`
+  margin: 10px auto;
+  border: 8px solid #d5e5ffff;
+  border-top: 8px solid #2a7fffff;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: ${spinAnimation} 2s linear infinite;
 `
 
 export const DocumentIcon = styled(FontAwesomeIcon)`
@@ -112,6 +127,8 @@ export const ModalOverlay = styled.div`
 
 export const ModalContent = styled.div`
   background-color: rgb(32, 35, 36);
+  display: block;
+  justify-content: center;
   color: #fff;
   padding: 20px;
   border-radius: 4px;
