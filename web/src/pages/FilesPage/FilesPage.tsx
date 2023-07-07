@@ -21,13 +21,7 @@ import {
   UploadFileBtn,
 } from 'src/pages/HomePage/HomeStyles'
 
-import {
-  BackBtn,
-  Container,
-  Title,
-  SubTitle,
-  Description,
-} from '../HomePage/HomeStyles'
+import { Container, Title, SubTitle, Description } from '../HomePage/HomeStyles'
 
 const FILE_QUERY_WO_VERSIONS = gql`
   query FileQuery($id: Int!) {

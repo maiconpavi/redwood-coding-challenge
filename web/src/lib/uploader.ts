@@ -1,3 +1,5 @@
+import { Buffer } from 'buffer'
+
 import sha256 from 'fast-sha256'
 import graphql from 'types/graphql'
 
