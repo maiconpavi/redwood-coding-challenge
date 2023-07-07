@@ -12,10 +12,11 @@ type FileUploadContainerProps = {
 
 export const FileUploadContainer = styled.div<FileUploadContainerProps>`
   display: flex;
+  padding: 20px;
   flex-direction: column;
   align-items: center;
   border-radius: 6px;
-  border: 2px dashed #202324;
+  border: 2px dashed #ccc;
   cursor: pointer;
 `
 
